@@ -1,0 +1,229 @@
+<h1 class="titulos">Registro de Obra</h1>
+
+
+
+
+
+
+<form (ngSubmit)="guardarOactualizar()" autocomplete="of" [formGroup]="miFormulario">
+    <div class="row">
+        <div class="col-lg-6">
+
+            <div class="card">
+
+                <div class="card-header bg-info text-white">
+                    Datos de la Obra
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="titulo">Código:*</label>
+                        <input formControlName="codigo" type="text" class="form-control" id="codigo" name="codigo">
+                        <span *ngIf="campoNoEsValido('codigo')" class="form-text text-danger msgError">
+                            Código: Campo Obligatorio
+                        </span>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="titulo">Titulo:*</label>
+                        <textarea rows="2" formControlName="titulo" type="text" class="form-control" id="titulo" name="titulo">
+                            </textarea>
+                        <span *ngIf="campoNoEsValido('titulo')" class="form-text text-danger msgError">
+                            Título: Campo Obligatorio
+                        </span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="titulo">Subtítulo:</label>
+                        <textarea rows="3" formControlName="subtitulo" type="text" class="form-control" id="subtitulo"
+                            name="subtitulo"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resumen">Resumen:*</label>
+                        <textarea rows="7" formControlName="resumen" type="text" class="form-control" id="resumen"
+                            name="resumen">
+                            </textarea>
+                        <span *ngIf="campoNoEsValido('resumen')" class="form-text text-danger msgError">
+                            Resumen: Campo Obligatorio
+                        </span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="resumen">Cantidad:*</label>
+                        <input formControlName="cantidad" type="text" class="form-control" id="cantidad"
+                            name="cantidad">
+                        <span *ngIf="campoNoEsValido('cantidad')" class="form-text text-danger msgError">
+                            Cantidad: Ingrese un valor válido
+                        </span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="fecha_publicacion">Fecha de publicación:</label>
+                        <br>
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Seleccione una fecha</mat-label>
+                            <input matInput formControlName="fecha" [matDatepicker]="picker">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                        <span *ngIf="campoNoEsValido('fecha_publicacion')" class="form-text text-danger msgError">
+                            Fecha de publicación: Ingrese un valor válido
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="obra_tipo">Tipo de Obra:*</label>
+                        <select formControlName="obra_tipo" class="form-control" name="obra_tipo" id="obra_tipo">
+                            <option value="">--- Seleccione un Tipo ---</option>
+                            <option *ngFor="let tipo of tipos" [ngValue]="tipo">{{tipo.nombre}}</option>
+                        </select>
+                        <span *ngIf="campoNoEsValido('obra_tipo')" class="form-text text-danger msgError">
+                            Tipo de Obra: Campo Obligatorio
+                        </span>
+                    </div>
+
+
+
+                    <h5 class="text-center">Documento</h5>
+                    <div style="position: relative" class="form-group">
+
+                        <input #inputFileDocumento (change)="seleccionarArchivoDocumento($event)" type="file"
+                            class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                        <label class="custom-file-label" for="inputGroupFile01">Seleccionar Documento</label>
+
+                    </div>
+
+                    <div *ngIf="documento ==true && archivoDocumento !=null" style="text-align: center"
+                        class="alert alert-success mt-4 mb-4">
+                        <img style="width: 50px;" src="{{'assets/img/pdf.png'}}" class="img-fluid">
+                        <br>
+                        {{archivoDocumento?.nombreArchivo}}
+                    </div>
+
+                    <div *ngIf="documento ==true && archivoDocumentoGuardado !=''" style="text-align: center"
+                        class="alert alert-success mt-4 mb-4">
+
+                        <img style="width: 50px;" src="{{'assets/img/pdf.png'}}" class="img-fluid">
+                        <br>
+                        {{archivoDocumentoGuardado}}
+                    </div>
+
+
+                    <div *ngIf="documento ==false" style="text-align: center" class="alert alert-danger mt-4 mb-4">
+                        No ha seleccionado un Documento PDF
+                    </div>
+
+
+                    <h5 class="text-center">Imagen de Portada</h5>
+                    <div style="position: relative" class="form-group">
+
+                        <input #inputFileImg (change)="seleccionarArchivo($event)" type="file" class="custom-file-input"
+                            id="inputGroupFile02" aria-describedby="inputGroupFileAddon02">
+                        <label class="custom-file-label" for="inputGroupFile02">Seleccionar Imágen</label>
+
+                    </div>
+                    <div style="text-align: center">
+                        <img *ngIf="archivo!=null && imagen==true" style="width:250p; height: 150px;"
+                            [src]="archivo?.imgPreview" alt="">
+                        <img *ngIf="imagen==false" style="width:250p; height: 150px;" src="{{'assets/img/no.png'}}"
+                            alt="">
+                        <img *ngIf="archivoImagenGuardado !='' && imagen==true" style="width:250p; height: 150px;"
+                            [src]="urlBaseImg+archivoImagenGuardado" alt="">
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="card">
+
+                <div class="card-header bg-info text-white">
+                    Autores
+                </div>
+
+                <div class="card-body">
+
+                    <div style="position:relative;">
+                        <div class="input-group mt-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">
+                                    <span class="fas fa-search"></span>
+                                </span>
+                            </div>
+                            <input #inputFilter (keyup)="filtrarAutores($event)"
+                                placeholder="Buscar por Apellidos o Nombres del Autor" type="text" class="form-control"
+                                aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+                        <div style="position: absolute;width:100%;z-index: 99999; box-shadow: 5px 5px 5px black;"
+                            id="list-tab" role="tablist">
+
+                            <button type="button" (click)="fijarAutoresBusqueda(a)" *ngFor="let a of autoresFiltrados"
+                                class="list-group-item list-group-item-action">
+                                {{a.nombres}} - {{a.apellidos}}
+                            </button>
+
+                        </div>
+                    </div>
+
+
+                    <div *ngIf="autoresSeleccionados.length == 0" class="alert alert-info mt-3">
+                        No ha seleccionado ningún Autor
+                    </div>
+
+                    <table *ngIf="autoresSeleccionados.length > 0" class="table table-striped">
+
+                        <thead>
+                            <tr class="text-center">
+                                <th>Autores Seleccionados</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+                            <tr [ngClass]="{'bg-danger text-white': !autor.activado}"
+                                *ngFor="let autor of autoresSeleccionados">
+                                <td>
+                                    {{autor.nombres}} {{autor.apellidos}}
+
+                                    <button *ngIf="autor.activado==true" type="button" (click)="eliminarAutor(autor)"
+                                        class="btn btn-danger btn-sm ml-3">
+                                        <span class="fas fa-trash-alt"></span>
+                                    </button>
+
+                                    <button *ngIf="autor.activado==false" type="button" (click)="activarAutor(autor)"
+                                        class="btn btn-success btn-sm ml-3">
+                                        <span class="fas fa-check-circle"></span>
+                                    </button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+            </div>
+        </div>
+
+        <button [class.bg-warning]="isEdit!=0" type="submit" class="btn btn-success w-100">
+            <span class="fas fa-download"></span>
+            {{isEdit==0 ? 'Guardar' : 'Actualizar'}}
+
+        </button>
+
+    </div>
+</form>

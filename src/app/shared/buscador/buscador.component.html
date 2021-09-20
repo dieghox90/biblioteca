@@ -1,0 +1,304 @@
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-spin-clockwise-fade-rotating" [fullScreen] = "true"><p style="color: white" > Procesando </p></ngx-spinner>
+
+<h1 class="titulos"> Buscador</h1>
+
+<div class="card">
+
+    <div class="card-header">
+        Datos de la obra
+    </div>
+
+    <div class="card-body">
+
+        <form (ngSubmit)="buscar()" autocomplete="of" [formGroup]="miFormulario">
+
+            <div class="form-group">
+                <label for="nombre">Buscar por título de la obra</label>
+                <input formControlName="nombre" type="text" id="nombre" class="form-control"
+                    placeholder="Autor o titulo de la obra">
+            </div>
+
+
+            <div class="form-group">
+                <label for="tipos">Buscar por tipo de obra</label>
+                <select formControlName="tipos" class="form-control" name="tipos" id="tipos">
+                    <option value="">--- Seleccione un Tipo ---</option>
+                    <option *ngFor="let tipo of tipos" [ngValue]="tipo">{{tipo.nombre}}</option>
+                </select>
+
+            </div>
+
+            <!--
+            <div class="form-group">
+                <nz-date-picker formControlName="anio" id="anio" name="anio" nzMode="year"></nz-date-picker>
+            </div>
+-->
+
+            <button class="btn btn-primary">
+                <span class="fas fa-search"></span> Buscar
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<div *ngIf="obras.length == 0" class="alert alert-warning mt-3 mb-3">
+    No hay registros que mostrar
+</div>
+
+<table *ngIf="obras.length > 0" class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Portada
+            </th>
+
+            <th>
+                Documento
+            </th>
+
+            <th>
+                Título
+            </th>
+
+    
+
+            <th>
+                Autores
+            </th>
+
+
+            <th>
+                Detalle
+            </th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+        <tr *ngFor="let obra of obras">
+
+            <td>
+                <img *ngIf="obra.nombreArchivoImagen!=null" style="width:100px"
+                    [src]="urlBaseImg+obra.nombreArchivoImagen" alt="">
+                <img *ngIf="obra.nombreArchivoImagen ==null" style="width:100px" src="https://www.itspm.edu.ec/recursos/no.png" alt="">
+            </td>
+
+            <td>
+                <div class="w-100 text-center">
+                    <a href="{{urlBaseImg + obra.nombreArchivoDocumento}}" class="w-100">
+                        <img *ngIf="obra.nombreArchivoDocumento !=null" style="width:50px"
+                            src="https://www.itspm.edu.ec/recursos/pdf.png" alt="">
+                        <br>
+                        <span class="fas fa-download text-center">
+                        </span>
+                    </a>
+                </div>
+            </td>
+
+            <td>
+                {{obra.titulo}}
+
+            </td>
+
+
+            <td>
+                <div *ngFor="let autor of obra.autores">
+                    <ol>
+                        <li>{{autor.nombres}} {{autor.apellidos}}</li>
+                    </ol>
+
+                </div>
+
+            </td>
+
+            <td>
+                <button (click)="ver(obra)" class="btn btn-info btn-sm" data-toggle="modal"
+                    data-target="#staticBackdrop">
+                    <span class="fas fa-eye"></span>
+                </button>
+            </td>
+
+
+
+        </tr>
+
+    </tbody>
+
+</table>
+
+
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100" id="staticBackdropLabel"> DETALLE DE OBRA</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="row">
+                    <div class="col-lg-5">
+                        <img *ngIf="obra.nombreArchivoImagen!=null" style="width:100%"
+                            [src]="urlBaseImg+obra.nombreArchivoImagen" alt="">
+                        <img *ngIf="obra.nombreArchivoImagen ==null" style="width:100%" src="https://www.itspm.edu.ec/recursos/pdf.png"
+                            alt="">
+                    </div>
+
+                    <div class="col-lg-7">
+                        <div>
+                            <span style="font-size: 11px;letter-spacing: 2px;"
+                                class="badge badge-secondary">Título</span>
+                            <div>
+                                {{obra.titulo}}
+                            </div>
+                        </div>
+
+                        <div>
+                            <span style="font-size: 11px;letter-spacing: 2px;"
+                                class="mt-2 badge badge-secondary">Subtitulo</span>
+                            <div *ngIf="obra.subtitulo != ''">
+                                {{obra.subtitulo}}
+                            </div>
+
+                            <div *ngIf="obra.subtitulo == ''">
+                                Sin Registro
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <span style="font-size: 11px;letter-spacing: 2px;" class="mt-2 badge badge-secondary">Tipo
+                                de Obra</span>
+                            <div>
+                                {{obra.obra_tipo?.nombre}}
+                            </div>
+
+                        </div>
+
+                        <div>
+                            <span style="font-size: 11px;letter-spacing: 2px;"
+                                class="mt-2 badge badge-secondary">Resumen</span>
+                            <div *ngIf="obra.resumen != ''">
+                                {{obra.resumen}}
+                            </div>
+                        </div>
+
+                        <div>
+                            <span style="font-size: 11px;letter-spacing: 2px;"
+                                class="mt-2 badge badge-secondary">Fecha de publicación:</span>
+                            <div>
+                                {{obra.fecha_publicacion}}
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <span style="font-size: 11px;letter-spacing: 2px;"
+                                class="mt-2 badge badge-secondary">Autores</span>
+
+                            <div *ngIf="obra.autores.length > 0 ">
+                                <div *ngFor="let a of obra.autores">
+
+                                    <div class="accordion mt-2" id="accordionExample">
+                                        <div class="card">
+                                            <div class="card-header" id="headingOne">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-link btn-block text-center" type="button"
+                                                        data-toggle="collapse" attr.data-target="#collapseOne{{a?.id}}"
+                                                        aria-expanded="true" aria-controls="collapseOne">
+                                                        {{a.nombres}} {{a.apellidos}} <span class="fas fa-chevron-circle-down"></span>
+                                                    </button>
+                                                </h2>
+                                            </div>
+
+                                            <div id="collapseOne{{a?.id}}" class="collapse "
+                                                aria-labelledby="headingOne" data-parent="#accordionExample">
+                                                <div class="card-body">
+
+                                                    <div>
+                                                        <span style="font-size: 11px;letter-spacing: 2px;"
+                                                            class="mt-2 badge badge-success">Correo</span>
+                                                        <div *ngIf="a.correo != ''">
+                                                            {{a.correo}}
+                                                        </div>
+
+                                                        <div *ngIf="a.correo == ''">
+                                                            Sin Registro
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <span style="font-size: 11px;letter-spacing: 2px;"
+                                                            class="mt-2 badge badge-success">Página Web</span>
+                                                        <div *ngIf="a.pagina_web != ''">
+                                                            {{a.pagina_web}}
+                                                        </div>
+
+                                                        <div *ngIf="a.pagina_web == ''">
+                                                            Sin Registro
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div>
+                                                        <span style="font-size: 11px;letter-spacing: 2px;"
+                                                            class="mt-2 badge badge-success">Twitter</span>
+                                                        <div *ngIf="a.twitter != ''">
+                                                            {{a.twitter}}
+                                                        </div>
+
+                                                        <div *ngIf="a.twitter == ''">
+                                                            Sin Registro
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <span style="font-size: 11px;letter-spacing: 2px;"
+                                class="mt-2 badge badge-secondary">Documento</span>
+                            <br>
+                            <div class="w-100">
+                                <a href="{{urlBaseImg + obra.nombreArchivoDocumento}}" class="w-100 text-center">
+
+                                    Click para descargar
+                                    <span class="fas fa-download text-center">
+                                    </span>
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

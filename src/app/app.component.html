@@ -1,0 +1,106 @@
+<nz-layout class="app-layout">
+  <nz-sider [class.hid]="ocultar" class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md"
+    [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+    <div class="sidebar-logo">
+      <a href="https://ng.ant.design/" target="_blank">
+        <img src="https://www.itspm.edu.ec/recursos/LOGOFIN.PNG" alt="logo">
+        <h1>Biblioteca Virtual</h1>
+      </a>
+    </div>
+
+    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <li *ngIf="authService?.hasRole('ROLE_ADMINISTRADOR')" nz-submenu nzTitle="Usuarios" nzIcon="team">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/nuevo-usuario"> <span class="fa fa-user-plus"></span> Nuevo</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/lista-usuarios"> <span class="fa fa-users"></span> Listado</a>
+          </li>
+
+          <!--
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/usuarios-inactivos"> <span class="fa fa-user-times"></span> Inactivos</a>
+          </li>
+-->
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/roles"> <span class="fa fa-user-tag"></span> Roles</a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="authService?.hasRole('ROLE_ADMINISTRADOR') || authService?.hasRole('ROLE_EMPLEADO')" nz-submenu
+        nzTitle="Obras" nzIcon="book">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/nueva-obra"><span class="fa fa-plus"></span> Nuevo Registro</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/lista-obras"><span class="fa fa-clipboard-list"></span> Listado</a>
+          </li>
+
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/tipo-obra"><span class="fa fa-th-list"></span> Tipos</a>
+          </li>
+
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/admin/autores"><span class="fa fa-address-book"></span> Autores</a>
+          </li>
+        </ul>
+      </li>
+
+      <li *ngIf="authService?.hasRole('ROLE_ADMINISTRADOR') || authService?.hasRole('ROLE_DOCENTE') || authService?.hasRole('ROLE_ESTUDIANTE')" nz-submenu
+        nzTitle="Buscar" nzIcon="search">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/shared/buscador"><span class="fa fa-search"></span> Buscador </a>
+          </li>
+
+        </ul>
+      </li>
+
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+
+        </span>
+        <span style="margin-left: -15px;">
+          {{authService?.hasRole('ROLE_ADMINISTRADOR')? 'Administrador':'' }}
+          {{authService?.hasRole('ROLE_EMPLEADO')? 'Empleado':'' }}
+          {{authService?.hasRole('ROLE_CLIENTE')? 'Cliente':'' }}
+        </span>
+
+        <div style="float:right;padding-right: 10px;">
+          {{this.serviceLayout._apellidos}} {{this.serviceLayout._nombres}}
+
+          <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a routerLink="/shared/perfil" class="btn-sm dropdown-item" type="button">
+                <span class="fas fa-user-cog"></span> Mis Datos
+              </a>
+              <button (click)="logout()" class="btn-sm dropdown-item" type="button">
+                <span class="fas fa-sign-out-alt"></span>Salir
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </nz-header>
+
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

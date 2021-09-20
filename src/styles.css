@@ -1,0 +1,25 @@
+
+h5{
+    font-weight: bold !important;
+    font-size: 17px !important;
+}
+
+h4{
+    font-weight: bold !important;
+}
+
+
+/* -------- MENSAJES DE ERROR --------*/
+.msgError{
+    font-size: 13px;
+}
+
+/* -------- PARA TITULOS Y SUBTITULOS --------*/
+.titulos{
+    text-align: left;
+    padding: 15px;
+    color:#078246;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
